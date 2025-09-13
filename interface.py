@@ -1,8 +1,3 @@
-"""
-Módulo Interfaz Gráfica del Analizador de Funciones - VERSIÓN MODERNA CON CUSTOMTKINTER
-Proporciona una interfaz gráfica moderna y atractiva para el análisis de funciones matemáticas.
-"""
-
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox, scrolledtext
@@ -564,9 +559,9 @@ class AnalizadorFuncionesApp:
         if not self._running:  # No mostrar ayuda si la app se está cerrando
             return
             
-        ayuda_texto = """🧮 ANALIZADOR DE FUNCIONES MATEMÁTICAS
+        ayuda_texto = """ANALIZADOR DE FUNCIONES MATEMÁTICAS
 
-📝 CÓMO USAR:
+CÓMO USAR:
 1. Ingrese una función en el campo "f(x) ="
 2. Haga clic en "Analizar Función"
 3. Opcionalmente, evalúe en un punto específico
@@ -579,13 +574,13 @@ class AnalizadorFuncionesApp:
 • Racionales: 1/x, (x+1)/(x-1)
 • Radicales: sqrt(x), x**(1/3)
 
-⌨️ ATAJOS DE TECLADO:
+ATAJOS DE TECLADO:
 • Ctrl+A: Analizar función
 • Ctrl+E: Evaluar punto
 • Ctrl+L: Limpiar todo
 • F1: Mostrar esta ayuda
 
-🔧 NOTACIÓN:
+NOTACIÓN:
 • Use ** para potencias (x**2)
 • Use * para multiplicación (2*x)
 • Use paréntesis para agrupar
