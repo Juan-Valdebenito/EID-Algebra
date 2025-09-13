@@ -66,7 +66,7 @@ class AnalizadorFuncionesApp:
         # Título principal
         self.titulo = ctk.CTkLabel(
             self.frame_izquierdo, 
-            text="🧮 Analizador de Funciones",
+            text=" Analizador de Funciones",
             font=ctk.CTkFont(size=24, weight="bold")
         )
         self.titulo.grid(row=0, column=0, pady=(20, 5), sticky="ew", columnspan=2)
@@ -89,7 +89,7 @@ class AnalizadorFuncionesApp:
         
         ctk.CTkLabel(
             funcion_frame, 
-            text="📝 Función a Analizar",
+            text=" Función a Analizar",
             font=ctk.CTkFont(size=16, weight="bold")
         ).grid(row=0, column=0, pady=(15, 10), sticky="w", padx=15)
         
@@ -112,7 +112,7 @@ class AnalizadorFuncionesApp:
         # Botón principal de análisis con color rojo personalizado
         self.btn_analizar = ctk.CTkButton(
             funcion_frame,
-            text="🔍 Analizar Función",
+            text=" Analizar Función",
             command=self.analizar_funcion,
             height=40,
             font=ctk.CTkFont(size=14, weight="bold"),
@@ -128,7 +128,7 @@ class AnalizadorFuncionesApp:
         
         ctk.CTkLabel(
             ejemplos_frame, 
-            text="📚 Ejemplos Rápidos:",
+            text=" Ejemplos Rápidos:",
             font=ctk.CTkFont(size=14, weight="bold")
         ).grid(row=0, column=0, columnspan=4, pady=(15, 10))
         
@@ -181,7 +181,7 @@ class AnalizadorFuncionesApp:
         
         ctk.CTkLabel(
             evaluacion_frame, 
-            text="📊 Evaluar en punto:",
+            text=" Evaluar en punto:",
             font=ctk.CTkFont(size=14, weight="bold")
         ).grid(row=0, column=0, columnspan=3, pady=(15, 10), sticky="w", padx=15)
         
@@ -198,7 +198,7 @@ class AnalizadorFuncionesApp:
         
         self.btn_evaluar = ctk.CTkButton(
             evaluacion_frame,
-            text="📈 Evaluar",
+            text=" Evaluar",
             command=self.evaluar_punto,
             width=80,
             height=32,
@@ -215,7 +215,7 @@ class AnalizadorFuncionesApp:
         
         self.btn_limpiar = ctk.CTkButton(
             botones_frame,
-            text="🗑️ Limpiar Todo",
+            text=" Limpiar ",
             command=self.limpiar_todo,
             height=35,
             font=ctk.CTkFont(size=12),
@@ -244,7 +244,7 @@ class AnalizadorFuncionesApp:
         
         ctk.CTkLabel(
             grafico_frame, 
-            text="📈 Gráfico de la Función",
+            text=" Gráfico de la Función",
             font=ctk.CTkFont(size=18, weight="bold")
         ).grid(row=0, column=0, pady=(15, 10), sticky="w", padx=15)
         
@@ -265,7 +265,7 @@ class AnalizadorFuncionesApp:
         
         ctk.CTkLabel(
             resultados_frame, 
-            text="📋 Análisis y Resultados",
+            text=" Análisis y Resultados",
             font=ctk.CTkFont(size=18, weight="bold")
         ).grid(row=0, column=0, pady=(15, 10), sticky="w", padx=15)
         
@@ -313,7 +313,6 @@ class AnalizadorFuncionesApp:
         self.entry_funcion.focus()
         
     def analizar_funcion(self):
-        """Analiza la función ingresada con mejor manejo de errores."""
         if not self._running:  # No ejecutar si la app se está cerrando
             return
             
@@ -337,14 +336,14 @@ class AnalizadorFuncionesApp:
             
             # Mostrar resultados
             resultados = [
-                "🎯 ANÁLISIS COMPLETO DE LA FUNCIÓN",
+                " ANÁLISIS COMPLETO DE LA FUNCIÓN",
                 "=" * 50,
-                f"📊 Función: f(x) = {funcion_str}",
+                f" Función: f(x) = {funcion_str}",
                 "",
-                f"🔍 Dominio: {dominio}",
-                f"📈 Recorrido: {recorrido}",
+                f" Dominio: {dominio}",
+                f" Recorrido: {recorrido}",
                 "",
-                "💻 DESARROLLO COMPUTACIONAL:",
+                " DESARROLLO COMPUTACIONAL:",
                 "-" * 30
             ]
             
@@ -357,39 +356,39 @@ class AnalizadorFuncionesApp:
             self.crear_grafico()
             
             if self._running:  # Solo mostrar mensaje si la app sigue activa
-                messagebox.showinfo("✅ Éxito", "Función analizada correctamente.")
+                messagebox.showinfo("La funcion se analizo correctamente.")
             
         except Exception as e:
             print(f"Error en análisis: {e}")
             if self._running:
-                messagebox.showerror("❌ Error", f"Error al analizar la función: {str(e)}")
+                messagebox.showerror(" Error", f" analizar la función: {str(e)}")
     
     def evaluar_punto(self):
-        """Evalúa la función en un punto específico."""
+
         if not self._running:  # No ejecutar si la app se está cerrando
             return
             
         try:
             if not hasattr(self.analizador, 'funcion_sympy') or self.analizador.funcion_sympy is None:
-                messagebox.showwarning("⚠️ Advertencia", "Primero debe analizar una función.")
+                messagebox.showwarning(" Advertencia", "Primero debe analizar una función.")
                 return
             
             valor_str = self.entry_valor.get().strip()
             if not valor_str:
-                messagebox.showwarning("⚠️ Advertencia", "Por favor ingrese un valor para evaluar.")
+                messagebox.showwarning(" Advertencia", "Por favor ingrese un valor para evaluar.")
                 return
             
             try:
                 x_val = float(valor_str)
             except ValueError:
-                messagebox.showerror("❌ Error", "Ingrese un número válido.")
+                messagebox.showerror(" Error", "Ingrese un número válido.")
                 return
             
             resultado, pasos = self.analizador.evaluar_punto(x_val)
             
             if resultado is not None:
                 # Mostrar pasos en el área de resultados
-                self.text_resultados.insert(tk.END, f"\n🎯 EVALUACIÓN EN x = {x_val}\n")
+                self.text_resultados.insert(tk.END, f"\n EVALUACIÓN EN x = {x_val}\n")
                 self.text_resultados.insert(tk.END, "=" * 30 + "\n")
                 
                 if isinstance(pasos, list):
@@ -398,22 +397,22 @@ class AnalizadorFuncionesApp:
                 else:
                     self.text_resultados.insert(tk.END, str(pasos) + "\n")
                 
-                self.text_resultados.insert(tk.END, f"\n✅ Resultado: f({x_val}) = {resultado}\n")
+                self.text_resultados.insert(tk.END, f"\n Resultado: f({x_val}) = {resultado}\n")
                 
                 # Crear gráfico con el punto evaluado
                 self.crear_grafico(punto_evaluado=(x_val, resultado))
                 
                 if self._running:  # Solo mostrar mensaje si la app sigue activa
-                    messagebox.showinfo("✅ Éxito", f"f({x_val}) = {resultado}")
+                    messagebox.showinfo(" Éxito", f"f({x_val}) = {resultado}")
             else:
                 error_msg = pasos if isinstance(pasos, str) else "Error al evaluar el punto"
                 if self._running:
-                    messagebox.showerror("❌ Error", error_msg)
+                    messagebox.showerror(" Error", error_msg)
                 
         except Exception as e:
             print(f"Error en evaluación: {e}")
             if self._running:
-                messagebox.showerror("❌ Error", f"Error al evaluar el punto: {str(e)}")
+                messagebox.showerror(" Error", f"Error al evaluar el punto: {str(e)}")
             
     def crear_grafico(self, punto_evaluado=None):
         """Crea y muestra el gráfico de la función - VERSIÓN MEJORADA."""
@@ -544,13 +543,13 @@ class AnalizadorFuncionesApp:
                 pass
             
             if self._running:  # Solo mostrar mensaje si la app sigue activa
-                messagebox.showinfo("🗑️ Limpiado", "Todos los campos han sido limpiados.")
+                messagebox.showinfo(" Limpiado", "Todos los campos han sido limpiados.")
             
         except Exception as e:
             print(f"Error al limpiar: {e}")
             try:
                 if self._running:
-                    messagebox.showinfo("🗑️ Limpiado", "Campos limpiados (con errores menores)")
+                    messagebox.showinfo(" Limpiado", "Campos limpiados (con errores menores)")
             except:
                 pass
                 
@@ -566,7 +565,7 @@ CÓMO USAR:
 2. Haga clic en "Analizar Función"
 3. Opcionalmente, evalúe en un punto específico
 
-💡 EJEMPLOS DE FUNCIONES:
+ EJEMPLOS DE FUNCIONES:
 • Polinómicas: x**2 + 2*x + 1
 • Trigonométricas: sin(x), cos(x)
 • Exponenciales: exp(x), 2**x
@@ -586,7 +585,7 @@ NOTACIÓN:
 • Use paréntesis para agrupar
 • Use funciones estándar (sin, cos, log, etc.)"""
         
-        messagebox.showinfo("❓ Ayuda", ayuda_texto)
+        messagebox.showinfo(" Ayuda", ayuda_texto)
         
     def cerrar_aplicacion(self):
         """Maneja el cierre de la aplicación de manera limpia."""
