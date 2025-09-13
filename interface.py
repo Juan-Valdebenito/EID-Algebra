@@ -251,30 +251,72 @@ class AnalizadorFuncionesApp:
         self.canvas_grafico.grid(row=1, column=0, sticky="nsew", padx=15, pady=(0, 15))
         
     def crear_area_resultados(self):
-        """Crea el área para mostrar los resultados."""
+        """Crea el área para mostrar los resultados con diseño mejorado."""
         resultados_frame = ctk.CTkFrame(self.frame_derecho, corner_radius=10)
         resultados_frame.grid(row=1, column=0, sticky="nsew", padx=20, pady=(10, 20))
         resultados_frame.grid_rowconfigure(1, weight=1)
         resultados_frame.grid_columnconfigure(0, weight=1)
         
-        ctk.CTkLabel(
-            resultados_frame, 
-            text="Análisis y Resultados",
-            font=ctk.CTkFont(size=18, weight="bold")
-        ).grid(row=0, column=0, pady=(15, 10), sticky="w", padx=15)
+        # Header simple y limpio
+        header_frame = ctk.CTkFrame(resultados_frame, fg_color="transparent")
+        header_frame.grid(row=0, column=0, sticky="ew", padx=15, pady=(15, 5))
+        header_frame.grid_columnconfigure(0, weight=1)
         
+        # Título simple
+        ctk.CTkLabel(
+            header_frame, 
+            text="Análisis y Resultados",
+            font=ctk.CTkFont(size=20, weight="bold"),
+            text_color=("#2E7D32", "#4CAF50")
+        ).grid(row=0, column=0, sticky="w")
+        
+        # Área de texto con texto más grande
         self.text_resultados = scrolledtext.ScrolledText(
             resultados_frame, 
             height=12, 
-            font=("Consolas", 11),
+            font=("Segoe UI", 12),
             wrap=tk.WORD,
-            bg="#2b2b2b",
-            fg="white",
+            bg="#1a1a1a",
+            fg="#ffffff",
             relief="flat",
             borderwidth=0,
-            insertbackground="white"
+            insertbackground="#ffffff",
+            selectbackground="#2E7D32",
+            selectforeground="#ffffff",
+            padx=20,
+            pady=15
         )
-        self.text_resultados.grid(row=1, column=0, sticky="nsew", padx=15, pady=(0, 15))
+        self.text_resultados.grid(row=1, column=0, sticky="nsew", padx=15, pady=(5, 15))
+        
+        # Configurar tags para colores con texto más grande
+        self.text_resultados.tag_configure("titulo", 
+            foreground="#4CAF50", 
+            font=("Segoe UI", 16, "bold")
+        )
+        self.text_resultados.tag_configure("subtitulo", 
+            foreground="#2196F3", 
+            font=("Segoe UI", 14, "bold")
+        )
+        self.text_resultados.tag_configure("resultado", 
+            foreground="#FFC107", 
+            font=("Segoe UI", 13, "bold")
+        )
+        self.text_resultados.tag_configure("separador", 
+            foreground="#666666",
+            font=("Segoe UI", 11)
+        )
+        self.text_resultados.tag_configure("normal", 
+            foreground="#E0E0E0",
+            font=("Segoe UI", 12)
+        )
+        self.text_resultados.tag_configure("destacado", 
+            foreground="#FF5722", 
+            font=("Segoe UI", 13, "bold")
+        )
+        self.text_resultados.tag_configure("info", 
+            foreground="#9C27B0", 
+            font=("Segoe UI", 12, "italic")
+        )
         
     def crear_footer(self):
         """Crea el pie de página."""
@@ -307,7 +349,7 @@ class AnalizadorFuncionesApp:
         self.entry_funcion.focus()
         
     def analizar_funcion(self):
-        """Analiza la función ingresada."""
+        """Analiza la función ingresada con presentación mejorada."""
         if not self._running:
             return
             
@@ -329,23 +371,8 @@ class AnalizadorFuncionesApp:
             recorrido = self.analizador.calcular_recorrido()
             desarrollo = self.analizador.obtener_desarrollo_computacional()
             
-            # Mostrar resultados
-            resultados = [
-                "ANÁLISIS COMPLETO DE LA FUNCIÓN",
-                "=" * 50,
-                f"Función: f(x) = {funcion_str}",
-                "",
-                f"Dominio: {dominio}",
-                f"Recorrido: {recorrido}",
-                "",
-                "DESARROLLO COMPUTACIONAL:",
-                "-" * 30
-            ]
-            
-            resultados.extend(desarrollo)
-            
-            for resultado in resultados:
-                self.text_resultados.insert(tk.END, resultado + "\n")
+            # Mostrar resultados con formato mejorado
+            self.mostrar_resultados_formateados(funcion_str, dominio, recorrido, desarrollo)
             
             # Crear gráfico
             self.crear_grafico()
@@ -358,8 +385,59 @@ class AnalizadorFuncionesApp:
             if self._running:
                 messagebox.showerror("Error", f"Error al analizar la función: {str(e)}")
     
+    def mostrar_resultados_formateados(self, funcion_str, dominio, recorrido, desarrollo):
+        """Muestra los resultados con formato mejorado y colores."""
+        # Limpiar área
+        self.text_resultados.delete(1.0, tk.END)
+        
+        # Título principal
+        self.text_resultados.insert(tk.END, "ANÁLISIS COMPLETO DE LA FUNCIÓN\n", "titulo")
+        self.text_resultados.insert(tk.END, "=" * 50 + "\n", "separador")
+        self.text_resultados.insert(tk.END, "\n")
+        
+        # Función
+        self.text_resultados.insert(tk.END, "Función Analizada:\n", "subtitulo")
+        self.text_resultados.insert(tk.END, f"f(x) = {funcion_str}\n", "resultado")
+        self.text_resultados.insert(tk.END, "\n")
+        
+        # Dominio
+        self.text_resultados.insert(tk.END, "Dominio:\n", "subtitulo")
+        self.text_resultados.insert(tk.END, f"{dominio}\n", "resultado")
+        self.text_resultados.insert(tk.END, "\n")
+        
+        # Recorrido
+        self.text_resultados.insert(tk.END, "Recorrido:\n", "subtitulo")
+        self.text_resultados.insert(tk.END, f"{recorrido}\n", "resultado")
+        self.text_resultados.insert(tk.END, "\n")
+        
+        # Separador
+        self.text_resultados.insert(tk.END, "DESARROLLO COMPUTACIONAL\n", "titulo")
+        self.text_resultados.insert(tk.END, "-" * 30 + "\n", "separador")
+        self.text_resultados.insert(tk.END, "\n")
+        
+        # Desarrollo paso a paso
+        for paso in desarrollo:
+            if "===" in paso and "DESARROLLO" in paso:
+                continue  # Ya lo mostramos arriba
+            elif paso.startswith(("1.", "2.", "3.", "4.")):
+                self.text_resultados.insert(tk.END, paso + "\n", "subtitulo")
+            elif ":" in paso and not paso.startswith(" "):
+                if "Con eje X" in paso:
+                    self.text_resultados.insert(tk.END, "  " + paso + "\n", "destacado")
+                elif "Con eje Y" in paso:
+                    self.text_resultados.insert(tk.END, "  " + paso + "\n", "destacado")
+                else:
+                    self.text_resultados.insert(tk.END, "  " + paso + "\n", "info")
+            elif paso.strip() == "":
+                self.text_resultados.insert(tk.END, "\n")
+            else:
+                self.text_resultados.insert(tk.END, "  " + paso + "\n", "normal")
+        
+        # Scroll al inicio
+        self.text_resultados.see(1.0)
+    
     def evaluar_punto(self):
-        """Evalúa la función en un punto específico."""
+        """Evalúa la función en un punto específico con formato mejorado."""
         if not self._running:
             return
             
@@ -382,17 +460,21 @@ class AnalizadorFuncionesApp:
             resultado, pasos = self.analizador.evaluar_punto(x_val)
             
             if resultado is not None:
-                # Mostrar pasos en el área de resultados
-                self.text_resultados.insert(tk.END, f"\nEVALUACIÓN EN x = {x_val}\n")
-                self.text_resultados.insert(tk.END, "=" * 30 + "\n")
+                # Mostrar evaluación con formato mejorado
+                self.text_resultados.insert(tk.END, f"\nEVALUACIÓN EN x = {x_val}\n", "titulo")
+                self.text_resultados.insert(tk.END, "=" * 30 + "\n", "separador")
+                self.text_resultados.insert(tk.END, "\n")
                 
                 if isinstance(pasos, list):
                     for paso in pasos:
-                        self.text_resultados.insert(tk.END, paso + "\n")
+                        if "f(" in paso and "=" in paso and not paso.startswith(" "):
+                            self.text_resultados.insert(tk.END, paso + "\n", "resultado")
+                        else:
+                            self.text_resultados.insert(tk.END, paso + "\n", "normal")
                 else:
-                    self.text_resultados.insert(tk.END, str(pasos) + "\n")
+                    self.text_resultados.insert(tk.END, str(pasos) + "\n", "normal")
                 
-                self.text_resultados.insert(tk.END, f"\nResultado: f({x_val}) = {resultado}\n")
+                self.text_resultados.insert(tk.END, f"\nResultado: f({x_val}) = {resultado}\n", "resultado")
                 
                 # Crear gráfico con el punto evaluado
                 self.crear_grafico(punto_evaluado=(x_val, resultado))
