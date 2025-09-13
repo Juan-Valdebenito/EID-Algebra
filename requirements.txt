@@ -1,0 +1,7 @@
+customtkinter>=5.2.0
+
+# Análisis matemático simbólico
+sympy>=1.12
+
+# Gráficos y visualización
+matplotlib>=3.7.0 
