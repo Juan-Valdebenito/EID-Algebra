@@ -13,11 +13,9 @@ from analizador import AnalizadorFunciones
 from graficador import GraficadorFunciones
 
 # Configurar CustomTkinter
-ctk.set_appearance_mode("dark")  # Modo oscuro por defecto
-ctk.set_default_color_theme("dark-blue")  # Tema base válido
-
+ctk.set_appearance_mode("dark")  
+ctk.set_default_color_theme("dark-blue")  
 class AnalizadorFuncionesApp:
-    """Clase principal de la aplicación con interfaz moderna CustomTkinter."""
     
     def __init__(self):
         self.root = ctk.CTk()
@@ -34,7 +32,7 @@ class AnalizadorFuncionesApp:
         self.root.protocol("WM_DELETE_WINDOW", self.cerrar_aplicacion)
         
     def configurar_ventana(self):
-        """Configura la ventana principal con diseño moderno."""
+     
         self.root.title("🧮 Analizador de Funciones Matemáticas - EID")
         self.root.geometry("1600x1000")
         self.root.minsize(1400, 900)
@@ -42,7 +40,6 @@ class AnalizadorFuncionesApp:
         self.root.grid_columnconfigure(1, weight=2)
         
     def crear_layout(self):
-        """Crea todos los widgets con diseño moderno."""
         # Frame principal izquierdo (controles)
         self.frame_izquierdo = ctk.CTkFrame(self.root, corner_radius=15)
         self.frame_izquierdo.grid(row=0, column=0, sticky="nsew", padx=(20, 10), pady=20)
@@ -62,7 +59,6 @@ class AnalizadorFuncionesApp:
         self.crear_footer()
         
     def crear_header(self):
-        """Crea el encabezado de la aplicación."""
         # Título principal
         self.titulo = ctk.CTkLabel(
             self.frame_izquierdo, 
@@ -81,7 +77,6 @@ class AnalizadorFuncionesApp:
         self.subtitulo.grid(row=1, column=0, pady=(0, 20), sticky="ew", columnspan=2)
         
     def crear_controles(self):
-        """Crea los controles de entrada con diseño moderno."""
         # Sección de entrada de función
         funcion_frame = ctk.CTkFrame(self.frame_izquierdo, corner_radius=10)
         funcion_frame.grid(row=2, column=0, columnspan=2, sticky="ew", padx=20, pady=(0, 15))
@@ -109,15 +104,15 @@ class AnalizadorFuncionesApp:
         self.entry_funcion.grid(row=2, column=0, sticky="ew", padx=15, pady=(0, 10))
         self.entry_funcion.bind('<Return>', lambda e: self.analizar_funcion())
         
-        # Botón principal de análisis con color rojo personalizado
+        # Botón principal de análisis
         self.btn_analizar = ctk.CTkButton(
             funcion_frame,
             text=" Analizar Función",
             command=self.analizar_funcion,
             height=40,
             font=ctk.CTkFont(size=14, weight="bold"),
-            fg_color=("#dc3545", "#8b0000"),  # Rojo personalizado
-            hover_color=("#b02a37", "#660000")  # Rojo más oscuro al hover
+            fg_color=("#dc3545", "#8b0000"),  
+            hover_color=("#b02a37", "#660000")
         )
         self.btn_analizar.grid(row=3, column=0, sticky="ew", padx=15, pady=(0, 15))
         
@@ -203,7 +198,7 @@ class AnalizadorFuncionesApp:
             width=80,
             height=32,
             font=ctk.CTkFont(size=12),
-            fg_color=("#dc3545", "#8b0000"),  # Rojo personalizado
+            fg_color=("#dc3545", "#8b0000"),  
             hover_color=("#b02a37", "#660000")
         )
         self.btn_evaluar.grid(row=1, column=2, padx=(5, 15), pady=(0, 15))
@@ -219,7 +214,7 @@ class AnalizadorFuncionesApp:
             command=self.limpiar_todo,
             height=35,
             font=ctk.CTkFont(size=12),
-            fg_color=("#6c757d", "#495057"),  # Gris para limpiar
+            fg_color=("#6c757d", "#495057"),  
             hover_color=("#5a6268", "#343a40")
         )
         self.btn_limpiar.grid(row=0, column=0, padx=(15, 5), pady=15, sticky="ew")
@@ -230,7 +225,7 @@ class AnalizadorFuncionesApp:
             command=self.mostrar_ayuda,
             height=35,
             font=ctk.CTkFont(size=12),
-            fg_color=("#17a2b8", "#138496"),  # Azul para ayuda
+            fg_color=("#17a2b8", "#138496"),  
             hover_color=("#138496", "#0f6674")
         )
         self.btn_ayuda.grid(row=0, column=1, padx=(5, 15), pady=15, sticky="ew")
@@ -287,7 +282,7 @@ class AnalizadorFuncionesApp:
         footer_frame = ctk.CTkFrame(self.frame_izquierdo, corner_radius=10)
         footer_frame.grid(row=6, column=0, columnspan=2, sticky="ew", padx=20, pady=(0, 20))
         
-        info_text = "Proyecto EID - Análisis de Funciones\nDesarrollado con Python, SymPy y CustomTkinter"
+        info_text = "Proyecto EID - Análisis de Funciones\nDesarrollado por el grupo N°7"
         ctk.CTkLabel(
             footer_frame, 
             text=info_text,
@@ -415,8 +410,8 @@ class AnalizadorFuncionesApp:
                 messagebox.showerror(" Error", f"Error al evaluar el punto: {str(e)}")
             
     def crear_grafico(self, punto_evaluado=None):
-        """Crea y muestra el gráfico de la función - VERSIÓN MEJORADA."""
-        if not self._running:  # No crear gráficos si la app se está cerrando
+        """Crea y muestra el gráfico de la función."""
+        if not self._running:  
             return
             
         try:
@@ -427,7 +422,7 @@ class AnalizadorFuncionesApp:
             except:
                 pass
             
-            # CORRECCIÓN: Limpiar canvas anterior de manera más segura
+            # Limpiar canvas anterior de manera más segura
             if hasattr(self, 'canvas_actual') and self.canvas_actual is not None:
                 try:
                     widget = self.canvas_actual.get_tk_widget()
@@ -468,7 +463,6 @@ class AnalizadorFuncionesApp:
             
             if fig and self._running:  # Solo mostrar si la app sigue activa
                 try:
-                    # CORRECCIÓN: Crear nuevo canvas con más protección
                     if hasattr(self, 'canvas_grafico') and self.canvas_grafico.winfo_exists():
                         self.canvas_actual = FigureCanvasTkAgg(fig, self.canvas_grafico)
                         self.canvas_actual.draw()
@@ -480,7 +474,7 @@ class AnalizadorFuncionesApp:
             print(f"Error al crear gráfico: {e}")
             
     def limpiar_todo(self):
-        """Limpia todos los campos y resultados - VERSIÓN MEJORADA."""
+        """Limpia todos los campos y resultados."""
         if not self._running:  # No limpiar si la app se está cerrando
             return
             
