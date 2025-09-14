@@ -221,7 +221,7 @@ class AnalizadorFuncionesApp:
         
         self.btn_ayuda = ctk.CTkButton(
             botones_frame,
-            text="❓ Ayuda",
+            text="Ayuda",
             command=self.mostrar_ayuda,
             height=35,
             font=ctk.CTkFont(size=12),
@@ -267,7 +267,7 @@ class AnalizadorFuncionesApp:
         self.text_resultados = scrolledtext.ScrolledText(
             resultados_frame, 
             height=12, 
-            font=("Consolas", 11),
+            font=("Consolas", 16, "bold"),
             wrap=tk.WORD,
             bg="#2b2b2b",
             fg="white",
@@ -276,6 +276,12 @@ class AnalizadorFuncionesApp:
             insertbackground="white"
         )
         self.text_resultados.grid(row=1, column=0, sticky="nsew", padx=15, pady=(0, 15))
+        # Configurar tags de color
+        self.text_resultados.tag_configure("titulo", foreground="#FFD700", font=("Consolas", 18, "bold"))
+        self.text_resultados.tag_configure("subtitulo", foreground="#00BFFF", font=("Consolas", 16, "bold"))
+        self.text_resultados.tag_configure("etiqueta", foreground="#7CFC00", font=("Consolas", 15, "bold"))
+        self.text_resultados.tag_configure("valor", foreground="#FF69B4", font=("Consolas", 15, "bold"))
+        self.text_resultados.tag_configure("normal", foreground="white", font=("Consolas", 15))
         
     def crear_footer(self):
         """Crea el pie de página con información del proyecto."""
@@ -314,11 +320,11 @@ class AnalizadorFuncionesApp:
         try:
             funcion_str = self.entry_funcion.get().strip()
             if not funcion_str:
-                messagebox.showwarning("⚠️ Advertencia", "Por favor ingrese una función.")
+                messagebox.showwarning("Advertencia", "Por favor ingrese una función.")
                 return
             
             if not self.analizador.parsear_funcion(funcion_str):
-                messagebox.showerror("❌ Error", "Función inválida. Revise la sintaxis.")
+                messagebox.showerror("Error", "Función inválida. Revise la sintaxis.")
                 return
             
             # Limpiar resultados anteriores
@@ -329,29 +335,27 @@ class AnalizadorFuncionesApp:
             recorrido = self.analizador.calcular_recorrido()
             desarrollo = self.analizador.obtener_desarrollo_computacional()
             
-            # Mostrar resultados
-            resultados = [
-                " ANÁLISIS COMPLETO DE LA FUNCIÓN",
-                "=" * 50,
-                f" Función: f(x) = {funcion_str}",
-                "",
-                f" Dominio: {dominio}",
-                f" Recorrido: {recorrido}",
-                "",
-                " DESARROLLO COMPUTACIONAL:",
-                "-" * 30
-            ]
-            
-            resultados.extend(desarrollo)
-            
-            for resultado in resultados:
-                self.text_resultados.insert(tk.END, resultado + "\n")
+            # Mostrar resultados con colores y tamaño
+            self.text_resultados.insert(tk.END, " ANÁLISIS COMPLETO DE LA FUNCIÓN\n", "titulo")
+            self.text_resultados.insert(tk.END, "=" * 50 + "\n", "subtitulo")
+            self.text_resultados.insert(tk.END, f" Función: f(x) = ", "etiqueta")
+            self.text_resultados.insert(tk.END, f"{funcion_str}\n", "valor")
+            self.text_resultados.insert(tk.END, "\n", "normal")
+            self.text_resultados.insert(tk.END, " Dominio: ", "etiqueta")
+            self.text_resultados.insert(tk.END, f"{dominio}\n", "valor")
+            self.text_resultados.insert(tk.END, " Recorrido: ", "etiqueta")
+            self.text_resultados.insert(tk.END, f"{recorrido}\n", "valor")
+            self.text_resultados.insert(tk.END, "\n", "normal")
+            self.text_resultados.insert(tk.END, " DESARROLLO COMPUTACIONAL:\n", "subtitulo")
+            self.text_resultados.insert(tk.END, "-" * 30 + "\n", "subtitulo")
+            for paso in desarrollo:
+                self.text_resultados.insert(tk.END, paso + "\n", "normal")
             
             # Crear gráfico
             self.crear_grafico()
             
             if self._running:  # Solo mostrar mensaje si la app sigue activa
-                messagebox.showinfo("La funcion se analizo correctamente.")
+                messagebox.showinfo("Éxito", "La función se analizó correctamente.")
             
         except Exception as e:
             print(f"Error en análisis: {e}")
@@ -365,18 +369,18 @@ class AnalizadorFuncionesApp:
             
         try:
             if not hasattr(self.analizador, 'funcion_sympy') or self.analizador.funcion_sympy is None:
-                messagebox.showwarning(" Advertencia", "Primero debe analizar una función.")
+                messagebox.showwarning("Advertencia", "Primero debe analizar una función.")
                 return
             
             valor_str = self.entry_valor.get().strip()
             if not valor_str:
-                messagebox.showwarning(" Advertencia", "Por favor ingrese un valor para evaluar.")
+                messagebox.showwarning("Advertencia", "Por favor ingrese un valor para evaluar.")
                 return
             
             try:
                 x_val = float(valor_str)
             except ValueError:
-                messagebox.showerror(" Error", "Ingrese un número válido.")
+                messagebox.showerror("Error", "Ingrese un número válido.")
                 return
             
             resultado, pasos = self.analizador.evaluar_punto(x_val)
@@ -398,16 +402,16 @@ class AnalizadorFuncionesApp:
                 self.crear_grafico(punto_evaluado=(x_val, resultado))
                 
                 if self._running:  # Solo mostrar mensaje si la app sigue activa
-                    messagebox.showinfo(" Éxito", f"f({x_val}) = {resultado}")
+                    messagebox.showinfo("Éxito", f"f({x_val}) = {resultado}")
             else:
                 error_msg = pasos if isinstance(pasos, str) else "Error al evaluar el punto"
                 if self._running:
-                    messagebox.showerror(" Error", error_msg)
+                    messagebox.showerror("Error", error_msg)
                 
         except Exception as e:
             print(f"Error en evaluación: {e}")
             if self._running:
-                messagebox.showerror(" Error", f"Error al evaluar el punto: {str(e)}")
+                messagebox.showerror("Error", f"Error al evaluar el punto: {str(e)}")
             
     def crear_grafico(self, punto_evaluado=None):
         """Crea y muestra el gráfico de la función."""
@@ -537,13 +541,13 @@ class AnalizadorFuncionesApp:
                 pass
             
             if self._running:  # Solo mostrar mensaje si la app sigue activa
-                messagebox.showinfo(" Limpiado", "Todos los campos han sido limpiados.")
+                messagebox.showinfo("Limpiado", "Todos los campos han sido limpiados.")
             
         except Exception as e:
             print(f"Error al limpiar: {e}")
             try:
                 if self._running:
-                    messagebox.showinfo(" Limpiado", "Campos limpiados (con errores menores)")
+                    messagebox.showinfo("Limpiado", "Campos limpiados (con errores menores)")
             except:
                 pass
                 
@@ -551,35 +555,31 @@ class AnalizadorFuncionesApp:
         """Muestra una ventana de ayuda."""
         if not self._running:  # No mostrar ayuda si la app se está cerrando
             return
-            
-        ayuda_texto = """ANALIZADOR DE FUNCIONES MATEMÁTICAS
-
-CÓMO USAR:
-1. Ingrese una función en el campo "f(x) ="
-2. Haga clic en "Analizar Función"
-3. Opcionalmente, evalúe en un punto específico
-
- EJEMPLOS DE FUNCIONES:
-• Polinómicas: x**2 + 2*x + 1
-• Trigonométricas: sin(x), cos(x)
-• Exponenciales: exp(x), 2**x
-• Logarítmicas: log(x), ln(x)
-• Racionales: 1/x, (x+1)/(x-1)
-• Radicales: sqrt(x), x**(1/3)
-
-ATAJOS DE TECLADO:
-• Ctrl+A: Analizar función
-• Ctrl+E: Evaluar punto
-• Ctrl+L: Limpiar todo
-• F1: Mostrar esta ayuda
-
-NOTACIÓN:
-• Use ** para potencias (x**2)
-• Use * para multiplicación (2*x)
-• Use paréntesis para agrupar
-• Use funciones estándar (sin, cos, log, etc.)"""
-        
-        messagebox.showinfo(" Ayuda", ayuda_texto)
+        ayuda_texto = (
+            "ANALIZADOR DE FUNCIONES MATEMÁTICAS\n\n"
+            "CÓMO USAR:\n"
+            "1. Ingrese una función en el campo 'f(x) ='\n"
+            "2. Haga clic en 'Analizar Función'\n"
+            "3. Opcionalmente, evalúe en un punto específico\n\n"
+            "EJEMPLOS DE FUNCIONES:\n"
+            "• Polinómicas: x**2 + 2*x + 1\n"
+            "• Trigonométricas: sin(x), cos(x)\n"
+            "• Exponenciales: exp(x), 2**x\n"
+            "• Logarítmicas: log(x), ln(x)\n"
+            "• Racionales: 1/x, (x+1)/(x-1)\n"
+            "• Radicales: sqrt(x), x**(1/3)\n\n"
+            "ATAJOS DE TECLADO:\n"
+            "• Ctrl+A: Analizar función\n"
+            "• Ctrl+E: Evaluar punto\n"
+            "• Ctrl+L: Limpiar todo\n"
+            "• F1: Mostrar esta ayuda\n\n"
+            "NOTACIÓN:\n"
+            "• Use ** para potencias (x**2)\n"
+            "• Use * para multiplicación (2*x)\n"
+            "• Use paréntesis para agrupar\n"
+            "• Use funciones estándar (sin, cos, log, etc.)"
+        )
+        messagebox.showinfo("Ayuda", ayuda_texto)
         
     def cerrar_aplicacion(self):
         """Maneja el cierre de la aplicación de manera limpia."""
